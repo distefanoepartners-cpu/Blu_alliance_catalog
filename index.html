@@ -110,7 +110,11 @@ const URL_TOUR     = BASE + '/tour-costiera-amalfitana/';
 const URL_CONTACT  = BASE + '/contact/';
 
 const SLIDES = [
-  // ── I NOSTRI SERVIZI (slide 04, 05) ──
+  // ── INTRO ──
+  { file:'slide-01.jpg', name:'Amalfi Coast & Capri — Season 2026', category:'all' },
+  { file:'slide-02.jpg', name:'Itinerario', category:'all' },
+  { file:'slide-03.jpg', name:'I Nostri Servizi', category:'all' },
+  // ── SERVIZI ──
   { file:'slide-04.jpg', name:'I Nostri Servizi — Tour & Escursioni', category:'servizi',
     specs:'Tour Amalfi · Positano · Capri · Collettivi', bookUrl:URL_TOUR },
   { file:'slide-05.jpg', name:'I Nostri Servizi — Locazione & Altro', category:'servizi',
@@ -126,12 +130,12 @@ const SLIDES = [
   { file:'slide-13.jpg', name:'Cranchi Zaffiro 34',   category:'yacht', specs:'11.00m · 12 Guests · 2×260 HP', bookUrl:URL_FLOTTA },
   // ── GOZZI SORRENTINI ──
   { file:'slide-14.jpg', name:'Gozzi Sorrentini', category:'gozzi', isCategory:true },
-  { file:'slide-15.jpg', name:'Gozzo Jeranto',     category:'gozzi', specs:'9.50m · 10 Guests · 2×330 HP', bookUrl:URL_TOUR },
-  { file:'slide-16.jpg', name:'Di Luccia 33 Sirio',category:'gozzi', specs:'9.39m · 12 Guests · 2×330 HP', bookUrl:URL_TOUR },
-  { file:'slide-17.jpg', name:'Di Luccia 30',      category:'gozzi', specs:'9.00m · 12 Guests · 2×260 HP', bookUrl:URL_TOUR },
-  { file:'slide-18.jpg', name:'Acquamarina',        category:'gozzi', specs:'9.00m · 12 Guests · 2×260 HP', bookUrl:URL_TOUR },
-  { file:'slide-19.jpg', name:"Mimì 7.50",          category:'gozzi', specs:'7.90m · 8 Guests · 2×260 HP',  bookUrl:URL_TOUR },
-  { file:'slide-20.jpg', name:'Aprea 7.50',         category:'gozzi', specs:'7.90m · 8 Guests · 2×260 HP',  bookUrl:URL_TOUR },
+  { file:'slide-15.jpg', name:'Gozzo Jeranto',      category:'gozzi', specs:'9.50m · 10 Guests · 2×330 HP', bookUrl:URL_TOUR },
+  { file:'slide-16.jpg', name:'Di Luccia 33 Sirio', category:'gozzi', specs:'9.39m · 12 Guests · 2×330 HP', bookUrl:URL_TOUR },
+  { file:'slide-17.jpg', name:'Di Luccia 30',       category:'gozzi', specs:'9.00m · 12 Guests · 2×260 HP', bookUrl:URL_TOUR },
+  { file:'slide-18.jpg', name:'Acquamarina',         category:'gozzi', specs:'9.00m · 12 Guests · 2×260 HP', bookUrl:URL_TOUR },
+  { file:'slide-19.jpg', name:"Mimì 7.50",           category:'gozzi', specs:'7.90m · 8 Guests · 2×260 HP',  bookUrl:URL_TOUR },
+  { file:'slide-20.jpg', name:'Aprea 7.50',          category:'gozzi', specs:'7.90m · 8 Guests · 2×260 HP',  bookUrl:URL_TOUR },
   // ── GOMMONI ──
   { file:'slide-21.jpg', name:'Gommoni', category:'gommoni', isCategory:true },
   { file:'slide-22.jpg', name:'Marlin 40',       category:'gommoni', specs:'11.23m · 12 Guests · 3×350 HP', bookUrl:URL_NOLEGGIO },
@@ -150,10 +154,12 @@ const SLIDES = [
   { file:'slide-33.jpg', name:'Tango 30',            category:'vela', specs:'9.50m · 7 Guests · 1 Cabina',  bookUrl:URL_FLOTTA },
   // ── MOTO D'ACQUA ──
   { file:'slide-34.jpg', name:"Moto d'Acqua", category:'moto', isCategory:true },
-  { file:'slide-36.jpg', name:'Yamaha 1800 Wave Runner', category:'moto', specs:'3.35m · 2 Guests · 210 HP', bookUrl:URL_FLOTTA },
+  { file:'slide-35.jpg', name:'Yamaha 1800 Wave Runner', category:'moto', specs:'3.35m · 2 Guests · 210 HP', bookUrl:URL_FLOTTA },
+  { file:'slide-36.jpg', name:'Yamaha 1800 Wave Runner 210', category:'moto', specs:'3.35m · 2 Guests · 210 HP', bookUrl:URL_FLOTTA },
   // ── CHIUSURA ──
   { file:'slide-37.jpg', name:'Condizioni Generali di Servizio', category:'all', isCategory:true },
-  { file:'slide-38.jpg', name:'Contatti & Booking Online', category:'all', specs:'+39 379.234.21.38  ·  booking@blualliancegroup.com', bookUrl:URL_CONTACT },
+  { file:'slide-38.jpg', name:'Contatti & Booking Online', category:'all',
+    specs:'+39 379.234.21.38  ·  booking@blualliancegroup.com', bookUrl:URL_CONTACT },
 ];
 
 let currentIndex = 0, touchStartX = 0, touchStartY = 0;
