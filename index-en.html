@@ -11,92 +11,41 @@
 <style>
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html,body { width:100%; height:100%; overflow:hidden; background:#0a1628; font-family:'Segoe UI',system-ui,sans-serif; touch-action:none; }
-  #splash {
-    position:fixed; inset:0; z-index:999;
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    background:linear-gradient(160deg,#0a1628 0%,#1a3f8f 60%,#0ea5e9 100%);
-    transition:opacity 0.6s ease;
-  }
+  #splash { position:fixed; inset:0; z-index:999; display:flex; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(160deg,#0a1628 0%,#1a3f8f 60%,#0ea5e9 100%); transition:opacity 0.6s ease; }
   #splash.hidden { opacity:0; pointer-events:none; }
   #splash-img { width:min(380px,82vw); border-radius:16px; margin-bottom:36px; box-shadow:0 16px 48px rgba(0,0,0,0.5); }
   #splash h1 { color:white; font-size:clamp(16px,3.5vw,28px); font-weight:300; letter-spacing:3px; text-transform:uppercase; margin-bottom:6px; }
   #splash h2 { color:#7dd3fc; font-size:clamp(12px,2vw,16px); font-weight:400; letter-spacing:2px; margin-bottom:32px; }
   .lang-splash { display:flex; gap:10px; margin-bottom:28px; }
-  .lang-splash a {
-    color:rgba(255,255,255,0.7); text-decoration:none; font-size:13px; font-weight:700;
-    padding:8px 18px; border:2px solid rgba(255,255,255,0.3); border-radius:24px; transition:all 0.2s;
-  }
+  .lang-splash a { color:rgba(255,255,255,0.7); text-decoration:none; font-size:13px; font-weight:700; padding:8px 18px; border:2px solid rgba(255,255,255,0.3); border-radius:24px; transition:all 0.2s; }
   .lang-splash a.active { color:white; border-color:white; background:rgba(255,255,255,0.15); }
-  .start-btn {
-    background:white; color:#1a3f8f; border:none; border-radius:50px;
-    padding:16px 52px; font-size:16px; font-weight:700; letter-spacing:1px; cursor:pointer;
-    box-shadow:0 8px 32px rgba(0,0,0,0.35); transition:transform 0.15s;
-  }
+  .start-btn { background:white; color:#1a3f8f; border:none; border-radius:50px; padding:16px 52px; font-size:16px; font-weight:700; letter-spacing:1px; cursor:pointer; box-shadow:0 8px 32px rgba(0,0,0,0.35); transition:transform 0.15s; }
   .start-btn:active { transform:scale(0.97); }
-  #cat-nav {
-    position:fixed; top:0; left:0; right:0; z-index:100;
-    background:rgba(10,22,40,0.94); backdrop-filter:blur(14px);
-    display:flex; overflow-x:auto; overflow-y:hidden; scrollbar-width:none;
-    border-bottom:1px solid rgba(255,255,255,0.1); padding:0 6px;
-  }
+  #cat-nav { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(10,22,40,0.94); backdrop-filter:blur(14px); display:flex; overflow-x:auto; overflow-y:hidden; scrollbar-width:none; border-bottom:1px solid rgba(255,255,255,0.1); padding:0 6px; }
   #cat-nav::-webkit-scrollbar { display:none; }
-  .cat-btn {
-    flex-shrink:0; background:none; border:none;
-    color:rgba(255,255,255,0.5); padding:13px 12px;
-    font-size:10.5px; font-weight:600; letter-spacing:0.5px;
-    text-transform:uppercase; cursor:pointer; white-space:nowrap;
-    border-bottom:3px solid transparent; transition:all 0.2s;
-  }
+  .cat-btn { flex-shrink:0; background:none; border:none; color:rgba(255,255,255,0.5); padding:13px 12px; font-size:10.5px; font-weight:600; letter-spacing:0.5px; text-transform:uppercase; cursor:pointer; white-space:nowrap; border-bottom:3px solid transparent; transition:all 0.2s; }
   .cat-btn.active { color:#7dd3fc; border-bottom-color:#7dd3fc; }
   .lang-nav { margin-left:auto; display:flex; align-items:center; padding:0 8px; gap:6px; flex-shrink:0; }
-  .lang-nav a {
-    color:rgba(255,255,255,0.5); text-decoration:none; font-size:10px; font-weight:700;
-    padding:4px 9px; border:1px solid rgba(255,255,255,0.2); border-radius:12px; transition:all 0.2s;
-  }
+  .lang-nav a { color:rgba(255,255,255,0.5); text-decoration:none; font-size:10px; font-weight:700; padding:4px 9px; border:1px solid rgba(255,255,255,0.2); border-radius:12px; transition:all 0.2s; }
   .lang-nav a.active { color:#7dd3fc; border-color:#7dd3fc; }
   #viewer { position:fixed; inset:0; display:flex; flex-direction:column; }
   #slide-container { flex:1; position:relative; overflow:hidden; margin-top:46px; margin-bottom:82px; }
   .slide { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity 0.5s ease; pointer-events:none; }
   .slide.active { opacity:1; pointer-events:auto; }
   .slide img { width:100%; height:100%; object-fit:contain; user-select:none; -webkit-user-drag:none; }
-  #bottom-bar {
-    position:fixed; bottom:0; left:0; right:0; height:82px;
-    background:rgba(10,22,40,0.94); backdrop-filter:blur(14px);
-    border-top:1px solid rgba(255,255,255,0.1);
-    display:flex; align-items:center; padding:0 14px; gap:10px;
-  }
-  .nav-arrow {
-    background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15);
-    color:white; border-radius:50%; width:46px; height:46px;
-    font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center;
-    flex-shrink:0; transition:all 0.15s; user-select:none;
-  }
+  #bottom-bar { position:fixed; bottom:0; left:0; right:0; height:82px; background:rgba(10,22,40,0.94); backdrop-filter:blur(14px); border-top:1px solid rgba(255,255,255,0.1); display:flex; align-items:center; padding:0 14px; gap:10px; }
+  .nav-arrow { background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); color:white; border-radius:50%; width:46px; height:46px; font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all 0.15s; user-select:none; }
   .nav-arrow:active { background:rgba(255,255,255,0.22); transform:scale(0.94); }
   .nav-arrow:disabled { opacity:0.25; pointer-events:none; }
   #slide-info { flex:1; min-width:0; }
   #boat-name { color:white; font-size:14px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   #slide-meta { color:rgba(255,255,255,0.4); font-size:10.5px; margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  #book-btn {
-    background:linear-gradient(135deg,#2563EB,#0ea5e9); border:none; border-radius:50px;
-    color:white; font-size:12.5px; font-weight:700; padding:12px 18px; cursor:pointer;
-    white-space:nowrap; flex-shrink:0; box-shadow:0 4px 18px rgba(37,99,235,0.5);
-    transition:all 0.15s; letter-spacing:0.5px;
-  }
+  #book-btn { background:linear-gradient(135deg,#2563EB,#0ea5e9); border:none; border-radius:50px; color:white; font-size:12.5px; font-weight:700; padding:12px 18px; cursor:pointer; white-space:nowrap; flex-shrink:0; box-shadow:0 4px 18px rgba(37,99,235,0.5); transition:all 0.15s; letter-spacing:0.5px; }
   #book-btn:active { transform:scale(0.96); }
   #book-btn.hidden { opacity:0; pointer-events:none; width:0; padding:0; margin:0; overflow:hidden; }
-  #autoplay-btn {
-    background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15);
-    color:rgba(255,255,255,0.6); border-radius:50%; width:36px; height:36px;
-    font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center;
-    flex-shrink:0; transition:all 0.2s;
-  }
+  #autoplay-btn { background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); color:rgba(255,255,255,0.6); border-radius:50%; width:36px; height:36px; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all 0.2s; }
   #autoplay-btn.playing { color:#7dd3fc; border-color:#7dd3fc; background:rgba(125,211,252,0.1); }
-  #swipe-hint {
-    position:fixed; bottom:98px; left:50%; transform:translateX(-50%);
-    background:rgba(0,0,0,0.65); color:rgba(255,255,255,0.85);
-    padding:8px 22px; border-radius:20px; font-size:12px;
-    pointer-events:none; transition:opacity 0.6s; white-space:nowrap; z-index:90;
-  }
+  #swipe-hint { position:fixed; bottom:98px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.65); color:rgba(255,255,255,0.85); padding:8px 22px; border-radius:20px; font-size:12px; pointer-events:none; transition:opacity 0.6s; white-space:nowrap; z-index:90; }
   #swipe-hint.hidden { opacity:0; }
   #progress-bar { position:fixed; top:46px; left:0; right:0; height:2px; z-index:99; background:rgba(255,255,255,0.08); }
   #progress-fill { height:100%; background:linear-gradient(90deg,#2563EB,#0ea5e9); transition:width 0.3s ease; }
@@ -122,6 +71,7 @@
 <div id="viewer" style="display:none;">
   <nav id="cat-nav">
     <button class="cat-btn active" data-cat="all" onclick="jumpTo('all')">All</button>
+    <button class="cat-btn" data-cat="servizi" onclick="jumpTo('servizi')">🗂 Services</button>
     <button class="cat-btn" data-cat="yacht" onclick="jumpTo('yacht')">⚓ Yachts</button>
     <button class="cat-btn" data-cat="gozzi" onclick="jumpTo('gozzi')">🚢 Gozzo</button>
     <button class="cat-btn" data-cat="gommoni" onclick="jumpTo('gommoni')">🛥 RIB</button>
@@ -145,7 +95,7 @@
       <div id="boat-name">—</div>
       <div id="slide-meta">—</div>
     </div>
-    <button id="autoplay-btn" onclick="toggleAutoplay()" title="Autoplay">▶</button>
+    <button id="autoplay-btn" onclick="toggleAutoplay()">▶</button>
     <button id="book-btn" onclick="openBooking()">📅 Book Now</button>
     <button class="nav-arrow" id="nav-next" onclick="navigate(1)">›</button>
   </div>
@@ -160,90 +110,63 @@ const URL_TOUR    = BASE + '/amalfi-coast-tour/';
 const URL_CONTACT = BASE + '/contact/';
 
 const SLIDES = [
-  { file:'slide-04.jpg', name:'Motor Yachts', category:'yacht', isCategory:true },
-  { file:'slide-05.jpg', name:'Baia 40',              category:'yacht', specs:'12.08m · 12 Guests · 2×380 HP', bookUrl:URL_FLEET },
-  { file:'slide-06.jpg', name:'Itama 38',             category:'yacht', specs:'11.70m · 7 Guests · 2×450 HP',  bookUrl:URL_FLEET },
-  { file:'slide-07.jpg', name:'Cayman 38 Walk Around',category:'yacht', specs:'11.59m · 8 Guests · 2×380 HP',  bookUrl:URL_FLEET },
-  { file:'slide-08.jpg', name:'Italyure 37',          category:'yacht', specs:'11.35m · 12 Guests · 2×380 HP', bookUrl:URL_FLEET },
-  { file:'slide-09.jpg', name:'Ferretti 35',          category:'yacht', specs:'10.80m · 10 Guests · 2×380 HP', bookUrl:URL_FLEET },
-  { file:'slide-10.jpg', name:'Raptor 35',            category:'yacht', specs:'11.70m · 10 Guests · 2×260 HP', bookUrl:URL_FLEET },
-  { file:'slide-11.jpg', name:'Cranchi Zaffiro 34',   category:'yacht', specs:'11.00m · 12 Guests · 2×260 HP', bookUrl:URL_FLEET },
-  { file:'slide-12.jpg', name:'Gozzo Sorrentino', category:'gozzi', isCategory:true },
-  { file:'slide-13.jpg', name:'Gozzo Jeranto',     category:'gozzi', specs:'9.50m · 10 Guests · 2×330 HP', bookUrl:URL_TOUR },
-  { file:'slide-14.jpg', name:'Di Luccia 33 Sirio',category:'gozzi', specs:'9.39m · 12 Guests · 2×330 HP', bookUrl:URL_TOUR },
-  { file:'slide-15.jpg', name:'Di Luccia 30',      category:'gozzi', specs:'9.00m · 12 Guests · 2×260 HP', bookUrl:URL_TOUR },
-  { file:'slide-16.jpg', name:'Acquamarina',        category:'gozzi', specs:'9.00m · 12 Guests · 2×260 HP', bookUrl:URL_TOUR },
-  { file:'slide-17.jpg', name:"Mimì 7.50",          category:'gozzi', specs:'7.90m · 8 Guests · 2×260 HP',  bookUrl:URL_TOUR },
-  { file:'slide-18.jpg', name:'Aprea 7.50',         category:'gozzi', specs:'7.90m · 8 Guests · 2×260 HP',  bookUrl:URL_TOUR },
-  { file:'slide-19.jpg', name:'RIB / Inflatable Boats', category:'gommoni', isCategory:true },
-  { file:'slide-20.jpg', name:'Marlin 40',       category:'gommoni', specs:'11.23m · 12 Guests · 3×350 HP', bookUrl:URL_CHARTER },
-  { file:'slide-21.jpg', name:'Clubman 26',      category:'gommoni', specs:'8.58m · 10 Guests · 1×250 HP',  bookUrl:URL_CHARTER },
-  { file:'slide-22.jpg', name:'Salpa Soleil 20', category:'gommoni', specs:'6.40m · 6 Guests · 1×40 HP',    bookUrl:URL_CHARTER },
-  { file:'slide-23.jpg', name:'Predator',        category:'gommoni', specs:'5.99m · 6 Guests · 1×40 HP',    bookUrl:URL_CHARTER },
-  { file:'slide-24.jpg', name:'Motorboats', category:'motore', isCategory:true },
-  { file:'slide-25.jpg', name:"Manò 25 Sport",   category:'motore', specs:'8.25m · 8 Guests · 300 HP',  bookUrl:URL_CHARTER },
-  { file:'slide-26.jpg', name:'Saver 7.50',      category:'motore', specs:'7.52m · 8 Guests · 275 HP',  bookUrl:URL_CHARTER },
-  { file:'slide-27.jpg', name:'Cayman 585',      category:'motore', specs:'5.85m · 6 Guests · 40 HP',   bookUrl:URL_CHARTER },
-  { file:'slide-28.jpg', name:'Idea 58',         category:'motore', specs:'5.85m · 6 Guests · 40 HP',   bookUrl:URL_CHARTER },
-  { file:'slide-29.jpg', name:'Sailing Boats', category:'vela', isCategory:true },
-  { file:'slide-30.jpg', name:'Oceanis Clipper 323', category:'vela', specs:'10.00m · 8 Guests · 2 Cabins', bookUrl:URL_FLEET },
-  { file:'slide-31.jpg', name:'Tango 30',            category:'vela', specs:'9.50m · 7 Guests · 1 Cabin',  bookUrl:URL_FLEET },
-  { file:'slide-32.jpg', name:'Jet Ski / Wave Runner', category:'moto', isCategory:true },
-  { file:'slide-34.jpg', name:'Yamaha 1800 Wave Runner', category:'moto', specs:'3.35m · 2 Guests · 210 HP', bookUrl:URL_FLEET },
-  { file:'slide-35.jpg', name:'General Terms of Service', category:'all', isCategory:true },
-  { file:'slide-36.jpg', name:'Contacts & Online Booking', category:'all', specs:'+39 379.234.21.38  ·  booking@blualliancegroup.com', bookUrl:URL_CONTACT },
+  { file:'slide-04.jpg', name:'Our Services — Tours & Excursions', category:'servizi',
+    specs:'Amalfi Tour · Positano · Capri · Group Tours', bookUrl:URL_TOUR },
+  { file:'slide-05.jpg', name:'Our Services — Rental & More', category:'servizi',
+    specs:'Boat Rental · Transfer · Party on Board · Corporate Events', bookUrl:URL_CHARTER },
+  { file:'slide-06.jpg', name:'Motor Yachts', category:'yacht', isCategory:true },
+  { file:'slide-07.jpg', name:'Baia 40',              category:'yacht', specs:'12.08m · 12 Guests · 2×380 HP', bookUrl:URL_FLEET },
+  { file:'slide-08.jpg', name:'Itama 38',             category:'yacht', specs:'11.70m · 7 Guests · 2×450 HP',  bookUrl:URL_FLEET },
+  { file:'slide-09.jpg', name:'Cayman 38 Walk Around',category:'yacht', specs:'11.59m · 8 Guests · 2×380 HP',  bookUrl:URL_FLEET },
+  { file:'slide-10.jpg', name:'Italyure 37',          category:'yacht', specs:'11.35m · 12 Guests · 2×380 HP', bookUrl:URL_FLEET },
+  { file:'slide-11.jpg', name:'Ferretti 35',          category:'yacht', specs:'10.80m · 10 Guests · 2×380 HP', bookUrl:URL_FLEET },
+  { file:'slide-12.jpg', name:'Raptor 35',            category:'yacht', specs:'11.70m · 10 Guests · 2×260 HP', bookUrl:URL_FLEET },
+  { file:'slide-13.jpg', name:'Cranchi Zaffiro 34',   category:'yacht', specs:'11.00m · 12 Guests · 2×260 HP', bookUrl:URL_FLEET },
+  { file:'slide-14.jpg', name:'Gozzo Sorrentino', category:'gozzi', isCategory:true },
+  { file:'slide-15.jpg', name:'Gozzo Jeranto',     category:'gozzi', specs:'9.50m · 10 Guests · 2×330 HP', bookUrl:URL_TOUR },
+  { file:'slide-16.jpg', name:'Di Luccia 33 Sirio',category:'gozzi', specs:'9.39m · 12 Guests · 2×330 HP', bookUrl:URL_TOUR },
+  { file:'slide-17.jpg', name:'Di Luccia 30',      category:'gozzi', specs:'9.00m · 12 Guests · 2×260 HP', bookUrl:URL_TOUR },
+  { file:'slide-18.jpg', name:'Acquamarina',        category:'gozzi', specs:'9.00m · 12 Guests · 2×260 HP', bookUrl:URL_TOUR },
+  { file:'slide-19.jpg', name:"Mimì 7.50",          category:'gozzi', specs:'7.90m · 8 Guests · 2×260 HP',  bookUrl:URL_TOUR },
+  { file:'slide-20.jpg', name:'Aprea 7.50',         category:'gozzi', specs:'7.90m · 8 Guests · 2×260 HP',  bookUrl:URL_TOUR },
+  { file:'slide-21.jpg', name:'RIB / Inflatable Boats', category:'gommoni', isCategory:true },
+  { file:'slide-22.jpg', name:'Marlin 40',       category:'gommoni', specs:'11.23m · 12 Guests · 3×350 HP', bookUrl:URL_CHARTER },
+  { file:'slide-23.jpg', name:'Clubman 26',      category:'gommoni', specs:'8.58m · 10 Guests · 1×250 HP',  bookUrl:URL_CHARTER },
+  { file:'slide-24.jpg', name:'Salpa Soleil 20', category:'gommoni', specs:'6.40m · 6 Guests · 1×40 HP',    bookUrl:URL_CHARTER },
+  { file:'slide-25.jpg', name:'Predator',        category:'gommoni', specs:'5.99m · 6 Guests · 1×40 HP',    bookUrl:URL_CHARTER },
+  { file:'slide-26.jpg', name:'Motorboats', category:'motore', isCategory:true },
+  { file:'slide-27.jpg', name:"Manò 25 Sport",   category:'motore', specs:'8.25m · 8 Guests · 300 HP',  bookUrl:URL_CHARTER },
+  { file:'slide-28.jpg', name:'Saver 7.50',      category:'motore', specs:'7.52m · 8 Guests · 275 HP',  bookUrl:URL_CHARTER },
+  { file:'slide-29.jpg', name:'Cayman 585',      category:'motore', specs:'5.85m · 6 Guests · 40 HP',   bookUrl:URL_CHARTER },
+  { file:'slide-30.jpg', name:'Idea 58',         category:'motore', specs:'5.85m · 6 Guests · 40 HP',   bookUrl:URL_CHARTER },
+  { file:'slide-31.jpg', name:'Sailing Boats', category:'vela', isCategory:true },
+  { file:'slide-32.jpg', name:'Oceanis Clipper 323', category:'vela', specs:'10.00m · 8 Guests · 2 Cabins', bookUrl:URL_FLEET },
+  { file:'slide-33.jpg', name:'Tango 30',            category:'vela', specs:'9.50m · 7 Guests · 1 Cabin',  bookUrl:URL_FLEET },
+  { file:'slide-34.jpg', name:'Jet Ski / Wave Runner', category:'moto', isCategory:true },
+  { file:'slide-36.jpg', name:'Yamaha 1800 Wave Runner', category:'moto', specs:'3.35m · 2 Guests · 210 HP', bookUrl:URL_FLEET },
+  { file:'slide-37.jpg', name:'General Terms of Service', category:'all', isCategory:true },
+  { file:'slide-38.jpg', name:'Contacts & Online Booking', category:'all', specs:'+39 379.234.21.38  ·  booking@blualliancegroup.com', bookUrl:URL_CONTACT },
 ];
 
 let currentIndex = 0, touchStartX = 0, touchStartY = 0;
-const AUTOPLAY_INTERVAL = 5000;
-const AUTOPLAY_RESUME   = 15000;
+const AUTOPLAY_INTERVAL = 5000, AUTOPLAY_RESUME = 15000;
 let autoplayTimer = null, autoplayActive = false, ringTimer = null, ringStart = null;
 
-function startAutoplay() {
-  stopAutoplay(); autoplayActive = true; updateAutoplayBtn(); scheduleNext();
-}
-function stopAutoplay() {
-  autoplayActive = false;
-  if (autoplayTimer) { clearTimeout(autoplayTimer); autoplayTimer = null; }
-  stopRing(); updateAutoplayBtn();
-}
-function scheduleNext() {
-  stopRing(); startRing();
-  autoplayTimer = setTimeout(() => {
-    goTo(currentIndex < SLIDES.length - 1 ? currentIndex + 1 : 0);
-    if (autoplayActive) scheduleNext();
-  }, AUTOPLAY_INTERVAL);
-}
+function startAutoplay() { stopAutoplay(); autoplayActive = true; updateAutoplayBtn(); scheduleNext(); }
+function stopAutoplay() { autoplayActive = false; if (autoplayTimer) { clearTimeout(autoplayTimer); autoplayTimer = null; } stopRing(); updateAutoplayBtn(); }
+function scheduleNext() { stopRing(); startRing(); autoplayTimer = setTimeout(() => { goTo(currentIndex < SLIDES.length - 1 ? currentIndex + 1 : 0); if (autoplayActive) scheduleNext(); }, AUTOPLAY_INTERVAL); }
 function toggleAutoplay() { if (autoplayActive) stopAutoplay(); else startAutoplay(); }
-function resetAutoplay() {
-  if (!autoplayActive) return;
-  stopAutoplay(); autoplayActive = true;
-  setTimeout(() => { if (autoplayActive) { updateAutoplayBtn(); scheduleNext(); } }, AUTOPLAY_RESUME);
-}
-function updateAutoplayBtn() {
-  const btn = document.getElementById('autoplay-btn');
-  if (autoplayActive) { btn.textContent = '⏸'; btn.classList.add('playing'); }
-  else { btn.textContent = '▶'; btn.classList.remove('playing'); }
-}
+function resetAutoplay() { if (!autoplayActive) return; stopAutoplay(); autoplayActive = true; setTimeout(() => { if (autoplayActive) { updateAutoplayBtn(); scheduleNext(); } }, AUTOPLAY_RESUME); }
+function updateAutoplayBtn() { const btn = document.getElementById('autoplay-btn'); if (autoplayActive) { btn.textContent = '⏸'; btn.classList.add('playing'); } else { btn.textContent = '▶'; btn.classList.remove('playing'); } }
 function startRing() {
-  const ring = document.getElementById('autoplay-ring');
-  const prog = ring.querySelector('.progress');
-  ring.classList.add('visible');
-  ringStart = Date.now();
+  const ring = document.getElementById('autoplay-ring'), prog = ring.querySelector('.progress');
+  ring.classList.add('visible'); ringStart = Date.now();
   const circ = 2 * Math.PI * 15;
-  prog.style.strokeDasharray = circ;
-  prog.style.strokeDashoffset = circ;
-  function tick() {
-    const f = Math.min((Date.now() - ringStart) / AUTOPLAY_INTERVAL, 1);
-    prog.style.strokeDashoffset = circ * (1 - f);
-    if (f < 1 && autoplayActive) ringTimer = requestAnimationFrame(tick);
-  }
+  prog.style.strokeDasharray = circ; prog.style.strokeDashoffset = circ;
+  function tick() { const f = Math.min((Date.now() - ringStart) / AUTOPLAY_INTERVAL, 1); prog.style.strokeDashoffset = circ * (1 - f); if (f < 1 && autoplayActive) ringTimer = requestAnimationFrame(tick); }
   ringTimer = requestAnimationFrame(tick);
 }
-function stopRing() {
-  if (ringTimer) { cancelAnimationFrame(ringTimer); ringTimer = null; }
-  document.getElementById('autoplay-ring').classList.remove('visible');
-}
+function stopRing() { if (ringTimer) { cancelAnimationFrame(ringTimer); ringTimer = null; } document.getElementById('autoplay-ring').classList.remove('visible'); }
 
 function startCatalog() {
   document.getElementById('splash').classList.add('hidden');
@@ -257,29 +180,22 @@ function startCatalog() {
 function buildSlides() {
   const container = document.getElementById('slide-container');
   SLIDES.forEach(s => {
-    const div = document.createElement('div');
-    div.className = 'slide';
-    const img = document.createElement('img');
-    img.src = s.file; img.alt = s.name; img.draggable = false;
+    const div = document.createElement('div'); div.className = 'slide';
+    const img = document.createElement('img'); img.src = s.file; img.alt = s.name; img.draggable = false;
     div.appendChild(img); container.appendChild(div);
   });
   container.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; touchStartY = e.touches[0].clientY; }, { passive: true });
   container.addEventListener('touchend', e => {
-    const dx = e.changedTouches[0].clientX - touchStartX;
-    const dy = e.changedTouches[0].clientY - touchStartY;
+    const dx = e.changedTouches[0].clientX - touchStartX, dy = e.changedTouches[0].clientY - touchStartY;
     if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 45) { navigate(dx < 0 ? 1 : -1); document.getElementById('swipe-hint').classList.add('hidden'); }
   }, { passive: true });
-  document.addEventListener('keydown', e => {
-    if (['ArrowRight','ArrowDown'].includes(e.key)) navigate(1);
-    if (['ArrowLeft','ArrowUp'].includes(e.key)) navigate(-1);
-  });
+  document.addEventListener('keydown', e => { if (['ArrowRight','ArrowDown'].includes(e.key)) navigate(1); if (['ArrowLeft','ArrowUp'].includes(e.key)) navigate(-1); });
 }
 
 function goTo(index) {
   if (index < 0 || index >= SLIDES.length) return;
   document.querySelectorAll('.slide')[currentIndex]?.classList.remove('active');
-  currentIndex = index;
-  document.querySelectorAll('.slide')[currentIndex]?.classList.add('active');
+  currentIndex = index; document.querySelectorAll('.slide')[currentIndex]?.classList.add('active');
   updateUI();
 }
 function navigate(dir) { goTo(currentIndex + dir); resetAutoplay(); }
