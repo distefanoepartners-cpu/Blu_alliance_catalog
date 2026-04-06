@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<link rel="icon" type="image/png" href="favicon.png">
-<link rel="apple-touch-icon" href="favicon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
 <title>Blu Alliance — Fleet Catalog 2026</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -56,7 +56,7 @@
   .lang-nav a.active { color:#7dd3fc; border-color:#7dd3fc; }
   #viewer { position:fixed; inset:0; display:flex; flex-direction:column; }
   #slide-container { flex:1; position:relative; overflow:hidden; margin-top:46px; margin-bottom:82px; }
-  .slide { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity 0.3s ease; pointer-events:none; }
+  .slide { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity 0.5s ease; pointer-events:none; }
   .slide.active { opacity:1; pointer-events:auto; }
   .slide img { width:100%; height:100%; object-fit:contain; user-select:none; -webkit-user-drag:none; }
   #bottom-bar {
@@ -84,6 +84,13 @@
   }
   #book-btn:active { transform:scale(0.96); }
   #book-btn.hidden { opacity:0; pointer-events:none; width:0; padding:0; margin:0; overflow:hidden; }
+  #autoplay-btn {
+    background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15);
+    color:rgba(255,255,255,0.6); border-radius:50%; width:36px; height:36px;
+    font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+    flex-shrink:0; transition:all 0.2s;
+  }
+  #autoplay-btn.playing { color:#7dd3fc; border-color:#7dd3fc; background:rgba(125,211,252,0.1); }
   #swipe-hint {
     position:fixed; bottom:98px; left:50%; transform:translateX(-50%);
     background:rgba(0,0,0,0.65); color:rgba(255,255,255,0.85);
@@ -93,6 +100,10 @@
   #swipe-hint.hidden { opacity:0; }
   #progress-bar { position:fixed; top:46px; left:0; right:0; height:2px; z-index:99; background:rgba(255,255,255,0.08); }
   #progress-fill { height:100%; background:linear-gradient(90deg,#2563EB,#0ea5e9); transition:width 0.3s ease; }
+  #autoplay-ring { position:fixed; bottom:98px; right:16px; width:36px; height:36px; z-index:90; opacity:0; transition:opacity 0.3s; }
+  #autoplay-ring.visible { opacity:1; }
+  #autoplay-ring circle { fill:none; stroke:rgba(255,255,255,0.15); stroke-width:3; }
+  #autoplay-ring .progress { stroke:#7dd3fc; stroke-width:3; stroke-linecap:round; stroke-dasharray:100; stroke-dashoffset:100; transform:rotate(-90deg); transform-origin:50% 50%; }
 </style>
 </head>
 <body>
@@ -124,12 +135,17 @@
   </nav>
   <div id="progress-bar"><div id="progress-fill"></div></div>
   <div id="slide-container"></div>
+  <svg id="autoplay-ring" viewBox="0 0 36 36">
+    <circle cx="18" cy="18" r="15"/>
+    <circle class="progress" cx="18" cy="18" r="15"/>
+  </svg>
   <div id="bottom-bar">
     <button class="nav-arrow" id="nav-prev" onclick="navigate(-1)">‹</button>
     <div id="slide-info">
       <div id="boat-name">—</div>
       <div id="slide-meta">—</div>
     </div>
+    <button id="autoplay-btn" onclick="toggleAutoplay()" title="Autoplay">▶</button>
     <button id="book-btn" onclick="openBooking()">📅 Book Now</button>
     <button class="nav-arrow" id="nav-next" onclick="navigate(1)">›</button>
   </div>
@@ -141,7 +157,6 @@ const BASE = 'https://blualliancegroup.com/en';
 const URL_FLEET   = BASE + '/lease/';
 const URL_CHARTER = BASE + '/yacht-charter-salerno/';
 const URL_TOUR    = BASE + '/amalfi-coast-tour/';
-const URL_CAPRI   = BASE + '/capri-excursions/';
 const URL_CONTACT = BASE + '/contact/';
 
 const SLIDES = [
@@ -180,6 +195,55 @@ const SLIDES = [
 ];
 
 let currentIndex = 0, touchStartX = 0, touchStartY = 0;
+const AUTOPLAY_INTERVAL = 5000;
+const AUTOPLAY_RESUME   = 15000;
+let autoplayTimer = null, autoplayActive = false, ringTimer = null, ringStart = null;
+
+function startAutoplay() {
+  stopAutoplay(); autoplayActive = true; updateAutoplayBtn(); scheduleNext();
+}
+function stopAutoplay() {
+  autoplayActive = false;
+  if (autoplayTimer) { clearTimeout(autoplayTimer); autoplayTimer = null; }
+  stopRing(); updateAutoplayBtn();
+}
+function scheduleNext() {
+  stopRing(); startRing();
+  autoplayTimer = setTimeout(() => {
+    goTo(currentIndex < SLIDES.length - 1 ? currentIndex + 1 : 0);
+    if (autoplayActive) scheduleNext();
+  }, AUTOPLAY_INTERVAL);
+}
+function toggleAutoplay() { if (autoplayActive) stopAutoplay(); else startAutoplay(); }
+function resetAutoplay() {
+  if (!autoplayActive) return;
+  stopAutoplay(); autoplayActive = true;
+  setTimeout(() => { if (autoplayActive) { updateAutoplayBtn(); scheduleNext(); } }, AUTOPLAY_RESUME);
+}
+function updateAutoplayBtn() {
+  const btn = document.getElementById('autoplay-btn');
+  if (autoplayActive) { btn.textContent = '⏸'; btn.classList.add('playing'); }
+  else { btn.textContent = '▶'; btn.classList.remove('playing'); }
+}
+function startRing() {
+  const ring = document.getElementById('autoplay-ring');
+  const prog = ring.querySelector('.progress');
+  ring.classList.add('visible');
+  ringStart = Date.now();
+  const circ = 2 * Math.PI * 15;
+  prog.style.strokeDasharray = circ;
+  prog.style.strokeDashoffset = circ;
+  function tick() {
+    const f = Math.min((Date.now() - ringStart) / AUTOPLAY_INTERVAL, 1);
+    prog.style.strokeDashoffset = circ * (1 - f);
+    if (f < 1 && autoplayActive) ringTimer = requestAnimationFrame(tick);
+  }
+  ringTimer = requestAnimationFrame(tick);
+}
+function stopRing() {
+  if (ringTimer) { cancelAnimationFrame(ringTimer); ringTimer = null; }
+  document.getElementById('autoplay-ring').classList.remove('visible');
+}
 
 function startCatalog() {
   document.getElementById('splash').classList.add('hidden');
@@ -187,11 +251,12 @@ function startCatalog() {
   setTimeout(() => document.getElementById('splash').style.display = 'none', 700);
   buildSlides(); goTo(0);
   setTimeout(() => document.getElementById('swipe-hint').classList.add('hidden'), 3500);
+  startAutoplay();
 }
 
 function buildSlides() {
   const container = document.getElementById('slide-container');
-  SLIDES.forEach((s, i) => {
+  SLIDES.forEach(s => {
     const div = document.createElement('div');
     div.className = 'slide';
     const img = document.createElement('img');
@@ -217,9 +282,7 @@ function goTo(index) {
   document.querySelectorAll('.slide')[currentIndex]?.classList.add('active');
   updateUI();
 }
-
-function navigate(dir) { goTo(currentIndex + dir); }
-
+function navigate(dir) { goTo(currentIndex + dir); resetAutoplay(); }
 function updateUI() {
   const s = SLIDES[currentIndex];
   document.getElementById('boat-name').textContent = s.name;
@@ -231,15 +294,14 @@ function updateUI() {
   document.getElementById('progress-fill').style.width = ((currentIndex / (SLIDES.length - 1)) * 100) + '%';
   document.querySelectorAll('.cat-btn').forEach(b => { b.classList.toggle('active', b.dataset.cat === s.category || b.dataset.cat === 'all'); });
 }
-
 function jumpTo(cat) {
   document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
   document.querySelector(`[data-cat="${cat}"]`)?.classList.add('active');
-  if (cat === 'all') { goTo(0); return; }
+  if (cat === 'all') { goTo(0); resetAutoplay(); return; }
   const idx = SLIDES.findIndex(s => s.category === cat);
   if (idx >= 0) goTo(idx);
+  resetAutoplay();
 }
-
 function openBooking() { const url = SLIDES[currentIndex]?.bookUrl; if (url) window.open(url, '_blank'); }
 </script>
 </body>

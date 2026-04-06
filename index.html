@@ -2,16 +2,15 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<link rel="icon" type="image/png" href="favicon.png">
-<link rel="apple-touch-icon" href="favicon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
 <title>Blu Alliance — Catalogo 2026</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html,body { width:100%; height:100%; overflow:hidden; background:#0a1628; font-family:'Segoe UI',system-ui,sans-serif; touch-action:none; }
-
   #splash {
     position:fixed; inset:0; z-index:999;
     display:flex; flex-direction:column; align-items:center; justify-content:center;
@@ -34,7 +33,6 @@
     box-shadow:0 8px 32px rgba(0,0,0,0.35); transition:transform 0.15s;
   }
   .start-btn:active { transform:scale(0.97); }
-
   #cat-nav {
     position:fixed; top:0; left:0; right:0; z-index:100;
     background:rgba(10,22,40,0.94); backdrop-filter:blur(14px);
@@ -56,13 +54,11 @@
     padding:4px 9px; border:1px solid rgba(255,255,255,0.2); border-radius:12px; transition:all 0.2s;
   }
   .lang-nav a.active { color:#7dd3fc; border-color:#7dd3fc; }
-
   #viewer { position:fixed; inset:0; display:flex; flex-direction:column; }
   #slide-container { flex:1; position:relative; overflow:hidden; margin-top:46px; margin-bottom:82px; }
-  .slide { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity 0.3s ease; pointer-events:none; }
+  .slide { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity 0.5s ease; pointer-events:none; }
   .slide.active { opacity:1; pointer-events:auto; }
   .slide img { width:100%; height:100%; object-fit:contain; user-select:none; -webkit-user-drag:none; }
-
   #bottom-bar {
     position:fixed; bottom:0; left:0; right:0; height:82px;
     background:rgba(10,22,40,0.94); backdrop-filter:blur(14px);
@@ -89,6 +85,15 @@
   #book-btn:active { transform:scale(0.96); }
   #book-btn.hidden { opacity:0; pointer-events:none; width:0; padding:0; margin:0; overflow:hidden; }
 
+  /* AUTOPLAY indicator */
+  #autoplay-btn {
+    background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15);
+    color:rgba(255,255,255,0.6); border-radius:50%; width:36px; height:36px;
+    font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+    flex-shrink:0; transition:all 0.2s;
+  }
+  #autoplay-btn.playing { color:#7dd3fc; border-color:#7dd3fc; background:rgba(125,211,252,0.1); }
+
   #swipe-hint {
     position:fixed; bottom:98px; left:50%; transform:translateX(-50%);
     background:rgba(0,0,0,0.65); color:rgba(255,255,255,0.85);
@@ -98,6 +103,19 @@
   #swipe-hint.hidden { opacity:0; }
   #progress-bar { position:fixed; top:46px; left:0; right:0; height:2px; z-index:99; background:rgba(255,255,255,0.08); }
   #progress-fill { height:100%; background:linear-gradient(90deg,#2563EB,#0ea5e9); transition:width 0.3s ease; }
+
+  /* AUTOPLAY progress ring */
+  #autoplay-ring {
+    position:fixed; bottom:98px; right:16px;
+    width:36px; height:36px; z-index:90;
+    opacity:0; transition:opacity 0.3s;
+  }
+  #autoplay-ring.visible { opacity:1; }
+  #autoplay-ring circle { fill:none; stroke:rgba(255,255,255,0.15); stroke-width:3; }
+  #autoplay-ring .progress { stroke:#7dd3fc; stroke-width:3; stroke-linecap:round;
+    stroke-dasharray:100; stroke-dashoffset:100; transform:rotate(-90deg); transform-origin:50% 50%;
+    transition:stroke-dashoffset 0.1s linear;
+  }
 </style>
 </head>
 <body>
@@ -129,12 +147,20 @@
   </nav>
   <div id="progress-bar"><div id="progress-fill"></div></div>
   <div id="slide-container"></div>
+
+  <!-- SVG ring autoplay -->
+  <svg id="autoplay-ring" viewBox="0 0 36 36">
+    <circle cx="18" cy="18" r="15"/>
+    <circle class="progress" cx="18" cy="18" r="15"/>
+  </svg>
+
   <div id="bottom-bar">
     <button class="nav-arrow" id="nav-prev" onclick="navigate(-1)">‹</button>
     <div id="slide-info">
       <div id="boat-name">—</div>
       <div id="slide-meta">—</div>
     </div>
+    <button id="autoplay-btn" onclick="toggleAutoplay()" title="Autoplay">▶</button>
     <button id="book-btn" onclick="openBooking()">📅 Prenota Ora</button>
     <button class="nav-arrow" id="nav-next" onclick="navigate(1)">›</button>
   </div>
@@ -146,7 +172,6 @@ const BASE = 'https://blualliancegroup.com';
 const URL_FLOTTA   = BASE + '/flotta/';
 const URL_NOLEGGIO = BASE + '/noleggio-barche-salerno/';
 const URL_TOUR     = BASE + '/tour-costiera-amalfitana/';
-const URL_CAPRI    = BASE + '/escursioni-capri/';
 const URL_CONTACT  = BASE + '/contact/';
 
 const SLIDES = [
@@ -184,20 +209,98 @@ const SLIDES = [
   { file:'slide-36.jpg', name:'Contatti & Booking Online', category:'all', specs:'+39 379.234.21.38  ·  booking@blualliancegroup.com', bookUrl:URL_CONTACT },
 ];
 
+// ── STATE ────────────────────────────────────────────────────────────────────
 let currentIndex = 0;
 let touchStartX = 0, touchStartY = 0;
 
+// ── AUTOPLAY ─────────────────────────────────────────────────────────────────
+const AUTOPLAY_INTERVAL = 5000;   // ms tra una slide e l'altra
+const AUTOPLAY_RESUME   = 15000;  // ms di pausa dopo interazione manuale
+let autoplayTimer  = null;
+let autoplayActive = false;
+let ringTimer      = null;
+let ringStart      = null;
+
+function startAutoplay() {
+  stopAutoplay();
+  autoplayActive = true;
+  updateAutoplayBtn();
+  scheduleNext();
+}
+
+function stopAutoplay() {
+  autoplayActive = false;
+  if (autoplayTimer) { clearTimeout(autoplayTimer); autoplayTimer = null; }
+  stopRing();
+  updateAutoplayBtn();
+}
+
+function scheduleNext() {
+  stopRing();
+  startRing();
+  autoplayTimer = setTimeout(() => {
+    goTo(currentIndex < SLIDES.length - 1 ? currentIndex + 1 : 0);
+    if (autoplayActive) scheduleNext();
+  }, AUTOPLAY_INTERVAL);
+}
+
+function toggleAutoplay() {
+  if (autoplayActive) stopAutoplay();
+  else startAutoplay();
+}
+
+function resetAutoplay() {
+  if (!autoplayActive) return;
+  stopAutoplay();
+  autoplayActive = true;
+  setTimeout(() => { if (autoplayActive) { updateAutoplayBtn(); scheduleNext(); } }, AUTOPLAY_RESUME);
+}
+
+function updateAutoplayBtn() {
+  const btn = document.getElementById('autoplay-btn');
+  if (autoplayActive) { btn.textContent = '⏸'; btn.classList.add('playing'); }
+  else { btn.textContent = '▶'; btn.classList.remove('playing'); }
+}
+
+// SVG ring countdown
+function startRing() {
+  const ring = document.getElementById('autoplay-ring');
+  const prog = ring.querySelector('.progress');
+  ring.classList.add('visible');
+  ringStart = Date.now();
+  const circumference = 2 * Math.PI * 15; // r=15 → ~94.2
+  prog.style.strokeDasharray = circumference;
+  prog.style.strokeDashoffset = circumference;
+
+  function tick() {
+    const elapsed = Date.now() - ringStart;
+    const fraction = Math.min(elapsed / AUTOPLAY_INTERVAL, 1);
+    prog.style.strokeDashoffset = circumference * (1 - fraction);
+    if (fraction < 1 && autoplayActive) ringTimer = requestAnimationFrame(tick);
+  }
+  ringTimer = requestAnimationFrame(tick);
+}
+
+function stopRing() {
+  if (ringTimer) { cancelAnimationFrame(ringTimer); ringTimer = null; }
+  const ring = document.getElementById('autoplay-ring');
+  ring.classList.remove('visible');
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
 function startCatalog() {
   document.getElementById('splash').classList.add('hidden');
   document.getElementById('viewer').style.display = 'flex';
   setTimeout(() => document.getElementById('splash').style.display = 'none', 700);
-  buildSlides(); goTo(0);
+  buildSlides();
+  goTo(0);
   setTimeout(() => document.getElementById('swipe-hint').classList.add('hidden'), 3500);
+  startAutoplay();
 }
 
 function buildSlides() {
   const container = document.getElementById('slide-container');
-  SLIDES.forEach((s, i) => {
+  SLIDES.forEach((s) => {
     const div = document.createElement('div');
     div.className = 'slide';
     const img = document.createElement('img');
@@ -229,7 +332,10 @@ function goTo(index) {
   updateUI();
 }
 
-function navigate(dir) { goTo(currentIndex + dir); }
+function navigate(dir) {
+  goTo(currentIndex + dir);
+  resetAutoplay();
+}
 
 function updateUI() {
   const s = SLIDES[currentIndex];
@@ -249,9 +355,10 @@ function updateUI() {
 function jumpTo(cat) {
   document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
   document.querySelector(`[data-cat="${cat}"]`)?.classList.add('active');
-  if (cat === 'all') { goTo(0); return; }
+  if (cat === 'all') { goTo(0); resetAutoplay(); return; }
   const idx = SLIDES.findIndex(s => s.category === cat);
   if (idx >= 0) goTo(idx);
+  resetAutoplay();
 }
 
 function openBooking() {
