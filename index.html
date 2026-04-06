@@ -75,7 +75,7 @@
     <button class="cat-btn" data-cat="yacht" onclick="jumpTo('yacht')">Yacht a Motore</button>
     <button class="cat-btn" data-cat="gozzi" onclick="jumpTo('gozzi')">Gozzi Sorrentini</button>
     <button class="cat-btn" data-cat="gommoni" onclick="jumpTo('gommoni')">Gommoni</button>
-    <button class="cat-btn" data-cat="motore" onclick="jumpTo('motore')">Barche a Motore</button>
+    <button class="cat-btn" data-cat="motore" onclick="jumpTo('motore')">Le Barche</button>
     <button class="cat-btn" data-cat="vela" onclick="jumpTo('vela')">Barche a Vela</button>
     <button class="cat-btn" data-cat="moto" onclick="jumpTo('moto')">Moto d'Acqua</button>
     <div class="lang-nav">
@@ -112,54 +112,53 @@ const URL_CONTACT  = BASE + '/contact/';
 const SLIDES = [
   // ── INTRO ──
   { file:'slide-01.jpg', name:'Amalfi Coast & Capri — Season 2026', category:'all' },
-  { file:'slide-02.jpg', name:'Itinerario', category:'all' },
+  { file:'slide-02.jpg', name:'Itinerario', category:'all', bookUrl:'https://blualliancegroup.com/tour-costiera-amalfitana/' },
   { file:'slide-03.jpg', name:'I Nostri Servizi', category:'all' },
-  // ── SERVIZI ──
+  // ── I NOSTRI SERVIZI ──
   { file:'slide-04.jpg', name:'I Nostri Servizi — Tour & Escursioni', category:'servizi',
-    specs:'Tour Amalfi · Positano · Capri · Collettivi', bookUrl:URL_TOUR },
+    specs:'Tour Amalfi · Positano · Capri · Collettivi', bookUrl:'https://blualliancegroup.com/tour-costiera-amalfitana/' },
   { file:'slide-05.jpg', name:'I Nostri Servizi — Locazione & Altro', category:'servizi',
-    specs:'Locazione · Transfer · Party on Board · Eventi Aziendali', bookUrl:URL_NOLEGGIO },
+    specs:'Locazione · Transfer · Party on Board · Eventi Aziendali', bookUrl:'https://blualliancegroup.com/noleggio-barche-salerno/' },
   // ── YACHT A MOTORE ──
   { file:'slide-06.jpg', name:'Yacht a Motore', category:'yacht', isCategory:true },
-  { file:'slide-07.jpg', name:'Baia 40',              category:'yacht', specs:'12.08m · 12 Guests · 2×380 HP', bookUrl:URL_FLOTTA },
-  { file:'slide-08.jpg', name:'Itama 38',             category:'yacht', specs:'11.70m · 7 Guests · 2×450 HP',  bookUrl:URL_FLOTTA },
-  { file:'slide-09.jpg', name:'Cayman 38 Walk Around',category:'yacht', specs:'11.59m · 8 Guests · 2×380 HP',  bookUrl:URL_FLOTTA },
-  { file:'slide-10.jpg', name:'Italyure 37',          category:'yacht', specs:'11.35m · 12 Guests · 2×380 HP', bookUrl:URL_FLOTTA },
-  { file:'slide-11.jpg', name:'Ferretti 35',          category:'yacht', specs:'10.80m · 10 Guests · 2×380 HP', bookUrl:URL_FLOTTA },
-  { file:'slide-12.jpg', name:'Raptor 35',            category:'yacht', specs:'11.70m · 10 Guests · 2×260 HP', bookUrl:URL_FLOTTA },
-  { file:'slide-13.jpg', name:'Cranchi Zaffiro 34',   category:'yacht', specs:'11.00m · 12 Guests · 2×260 HP', bookUrl:URL_FLOTTA },
+  { file:'slide-07.jpg', name:'Baia 40',              category:'yacht', specs:'12.08m · 12 Guests · 2×380 HP', bookUrl:'https://blualliancegroup.com/flotta/' },
+  { file:'slide-08.jpg', name:'Itama 38',             category:'yacht', specs:'11.70m · 7 Guests · 2×450 HP',  bookUrl:'https://blualliancegroup.com/flotta/' },
+  { file:'slide-09.jpg', name:'Cayman 38 Walk Around',category:'yacht', specs:'11.59m · 8 Guests · 2×380 HP',  bookUrl:'https://blualliancegroup.com/flotta/' },
+  { file:'slide-10.jpg', name:'Italyure 37',          category:'yacht', specs:'11.35m · 12 Guests · 2×380 HP', bookUrl:'https://blualliancegroup.com/flotta/' },
+  { file:'slide-11.jpg', name:'Ferretti 35',          category:'yacht', specs:'10.80m · 10 Guests · 2×380 HP', bookUrl:'https://blualliancegroup.com/flotta/' },
+  { file:'slide-12.jpg', name:'Raptor 35',            category:'yacht', specs:'11.70m · 10 Guests · 2×260 HP', bookUrl:'https://blualliancegroup.com/flotta/' },
+  { file:'slide-13.jpg', name:'Cranchi Zaffiro 34',   category:'yacht', specs:'11.00m · 12 Guests · 2×260 HP', bookUrl:'https://blualliancegroup.com/flotta/' },
   // ── GOZZI SORRENTINI ──
   { file:'slide-14.jpg', name:'Gozzi Sorrentini', category:'gozzi', isCategory:true },
-  { file:'slide-15.jpg', name:'Gozzo Jeranto',      category:'gozzi', specs:'9.50m · 10 Guests · 2×330 HP', bookUrl:URL_TOUR },
-  { file:'slide-16.jpg', name:'Di Luccia 33 Sirio', category:'gozzi', specs:'9.39m · 12 Guests · 2×330 HP', bookUrl:URL_TOUR },
-  { file:'slide-17.jpg', name:'Di Luccia 30',       category:'gozzi', specs:'9.00m · 12 Guests · 2×260 HP', bookUrl:URL_TOUR },
-  { file:'slide-18.jpg', name:'Acquamarina',         category:'gozzi', specs:'9.00m · 12 Guests · 2×260 HP', bookUrl:URL_TOUR },
-  { file:'slide-19.jpg', name:"Mimì 7.50",           category:'gozzi', specs:'7.90m · 8 Guests · 2×260 HP',  bookUrl:URL_TOUR },
-  { file:'slide-20.jpg', name:'Aprea 7.50',          category:'gozzi', specs:'7.90m · 8 Guests · 2×260 HP',  bookUrl:URL_TOUR },
+  { file:'slide-15.jpg', name:'Gozzo Jeranto',      category:'gozzi', specs:'9.50m · 10 Guests · 2×330 HP', bookUrl:'https://blualliancegroup.com/tour-costiera-amalfitana/' },
+  { file:'slide-16.jpg', name:'Di Luccia 33 Sirio', category:'gozzi', specs:'9.39m · 12 Guests · 2×330 HP', bookUrl:'https://blualliancegroup.com/tour-costiera-amalfitana/' },
+  { file:'slide-17.jpg', name:'Di Luccia 30',       category:'gozzi', specs:'9.00m · 12 Guests · 2×260 HP', bookUrl:'https://blualliancegroup.com/tour-costiera-amalfitana/' },
+  { file:'slide-18.jpg', name:'Acquamarina',         category:'gozzi', specs:'9.00m · 12 Guests · 2×260 HP', bookUrl:'https://blualliancegroup.com/tour-costiera-amalfitana/' },
+  { file:'slide-19.jpg', name:"Mimì 7.50",           category:'gozzi', specs:'7.90m · 8 Guests · 2×260 HP',  bookUrl:'https://blualliancegroup.com/tour-costiera-amalfitana/' },
+  { file:'slide-20.jpg', name:'Aprea 7.50',          category:'gozzi', specs:'7.90m · 8 Guests · 2×260 HP',  bookUrl:'https://blualliancegroup.com/tour-costiera-amalfitana/' },
   // ── GOMMONI ──
   { file:'slide-21.jpg', name:'Gommoni', category:'gommoni', isCategory:true },
-  { file:'slide-22.jpg', name:'Marlin 40',       category:'gommoni', specs:'11.23m · 12 Guests · 3×350 HP', bookUrl:URL_NOLEGGIO },
-  { file:'slide-23.jpg', name:'Clubman 26',      category:'gommoni', specs:'8.58m · 10 Guests · 1×250 HP',  bookUrl:URL_NOLEGGIO },
-  { file:'slide-24.jpg', name:'Salpa Soleil 20', category:'gommoni', specs:'6.40m · 6 Guests · 1×40 HP',    bookUrl:URL_NOLEGGIO },
-  { file:'slide-25.jpg', name:'Predator',        category:'gommoni', specs:'5.99m · 6 Guests · 1×40 HP',    bookUrl:URL_NOLEGGIO },
-  // ── BARCHE A MOTORE ──
-  { file:'slide-26.jpg', name:'Barche a Motore', category:'motore', isCategory:true },
-  { file:'slide-27.jpg', name:"Manò 25 Sport",   category:'motore', specs:'8.25m · 8 Guests · 300 HP',  bookUrl:URL_NOLEGGIO },
-  { file:'slide-28.jpg', name:'Saver 7.50',      category:'motore', specs:'7.52m · 8 Guests · 275 HP',  bookUrl:URL_NOLEGGIO },
-  { file:'slide-29.jpg', name:'Cayman 585',      category:'motore', specs:'5.85m · 6 Guests · 40 HP',   bookUrl:URL_NOLEGGIO },
-  { file:'slide-30.jpg', name:'Idea 58',         category:'motore', specs:'5.85m · 6 Guests · 40 HP',   bookUrl:URL_NOLEGGIO },
+  { file:'slide-22.jpg', name:'Marlin 40',       category:'gommoni', specs:'11.23m · 12 Guests · 3×350 HP', bookUrl:'https://blualliancegroup.com/noleggio-barche-salerno/' },
+  { file:'slide-23.jpg', name:'Clubman 26',      category:'gommoni', specs:'8.58m · 10 Guests · 1×250 HP',  bookUrl:'https://blualliancegroup.com/noleggio-barche-salerno/' },
+  { file:'slide-24.jpg', name:'Salpa Soleil 20', category:'gommoni', specs:'6.40m · 6 Guests · 1×40 HP',    bookUrl:'https://blualliancegroup.com/noleggio-barche-salerno/' },
+  { file:'slide-25.jpg', name:'Predator',        category:'gommoni', specs:'5.99m · 6 Guests · 1×40 HP',    bookUrl:'https://blualliancegroup.com/noleggio-barche-salerno/' },
+  // ── LE BARCHE ──
+  { file:'slide-26.jpg', name:'Le Barche', category:'motore', isCategory:true },
+  { file:'slide-27.jpg', name:"Manò 25 Sport",   category:'motore', specs:'8.25m · 8 Guests · 300 HP',  bookUrl:'https://blualliancegroup.com/noleggio-barche-salerno/' },
+  { file:'slide-28.jpg', name:'Saver 7.50',      category:'motore', specs:'7.52m · 8 Guests · 275 HP',  bookUrl:'https://blualliancegroup.com/noleggio-barche-salerno/' },
+  { file:'slide-29.jpg', name:'Cayman 585',      category:'motore', specs:'5.85m · 6 Guests · 40 HP',   bookUrl:'https://blualliancegroup.com/noleggio-barche-salerno/' },
+  { file:'slide-30.jpg', name:'Idea 58',         category:'motore', specs:'5.85m · 6 Guests · 40 HP',   bookUrl:'https://blualliancegroup.com/noleggio-barche-salerno/' },
   // ── BARCHE A VELA ──
   { file:'slide-31.jpg', name:'Barche a Vela', category:'vela', isCategory:true },
-  { file:'slide-32.jpg', name:'Oceanis Clipper 323', category:'vela', specs:'10.00m · 8 Guests · 2 Cabine', bookUrl:URL_FLOTTA },
-  { file:'slide-33.jpg', name:'Tango 30',            category:'vela', specs:'9.50m · 7 Guests · 1 Cabina',  bookUrl:URL_FLOTTA },
+  { file:'slide-32.jpg', name:'Oceanis Clipper 323', category:'vela', specs:'10.00m · 8 Guests · 2 Cabine', bookUrl:'https://blualliancegroup.com/flotta/' },
+  { file:'slide-33.jpg', name:'Tango 30',            category:'vela', specs:'9.50m · 7 Guests · 1 Cabina',  bookUrl:'https://blualliancegroup.com/flotta/' },
   // ── MOTO D'ACQUA ──
   { file:'slide-34.jpg', name:"Moto d'Acqua", category:'moto', isCategory:true },
-  { file:'slide-35.jpg', name:'Yamaha 1800 Wave Runner', category:'moto', specs:'3.35m · 2 Guests · 210 HP', bookUrl:URL_FLOTTA },
-  { file:'slide-36.jpg', name:'Yamaha 1800 Wave Runner 210', category:'moto', specs:'3.35m · 2 Guests · 210 HP', bookUrl:URL_FLOTTA },
+  { file:'slide-35.jpg', name:'Yamaha 1800 Wave Runner', category:'moto', specs:'3.35m · 2 Guests · 210 HP', bookUrl:'https://blualliancegroup.com/flotta/' },
   // ── CHIUSURA ──
-  { file:'slide-37.jpg', name:'Condizioni Generali di Servizio', category:'all', isCategory:true },
-  { file:'slide-38.jpg', name:'Contatti & Booking Online', category:'all',
-    specs:'+39 379.234.21.38  ·  booking@blualliancegroup.com', bookUrl:URL_CONTACT },
+  { file:'slide-36.jpg', name:'Condizioni Generali di Servizio', category:'all', isCategory:true },
+  { file:'slide-37.jpg', name:'Contatti & Booking Online', category:'all',
+    specs:'+39 379.234.21.38  ·  booking@blualliancegroup.com', bookUrl:'https://blualliancegroup.com/contact/' },
 ];
 
 let currentIndex = 0, touchStartX = 0, touchStartY = 0;
